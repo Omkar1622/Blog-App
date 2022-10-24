@@ -1,10 +1,11 @@
 import { async } from '@firebase/util';
 import { addDoc, collection } from 'firebase/firestore';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase-config';
 
-const CreatePost = () => {
+const CreatePost = ({isAuth}) => {
+  
 
   const [title, setTitle] = useState("");
   const [postText, setPostText] = useState("");
@@ -29,6 +30,16 @@ const CreatePost = () => {
 
   }
 
+  // If we manually change the link to go to createpost page without login in to the app,
+  //  we will go to the createpost page in the app. To protect the access of that page 
+  // from the users which are not logged in, we will redirect them to login page whenever
+  // we found out that the isAuth useState is false and user is trying to acces createpost page.
+
+  useEffect(() => {
+      if(!isAuth) {
+          navigate("/login");
+      }
+  }, []);
 
 
   return (

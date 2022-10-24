@@ -8,8 +8,12 @@ import { signOut } from 'firebase/auth';
 import {auth} from "./firebase-config";
 
 function App() {
+// don't set the value of isAuth to false initially because when we are logged in and we refresh the page, 
+// we get the login page and it did not show that we are logged in, but we are actually logged in.
+  // const [isAuth, setIsAuth] = useState(false);  // whenever we refresh, it is set false even when we are logged in.
 
-  const [isAuth, setIsAuth] = useState(false);
+  // so instead get it from localeStorage as we added it in localeStorage. if it is present, it is true. if not present, then false.
+  const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
 
   const signUserOut = () => {
       signOut(auth).then(() => {
@@ -41,8 +45,8 @@ function App() {
         )}
       </nav>
       <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/createpost" element={<CreatePost/>} />
+          <Route path="/" element={<Home isAuth={isAuth}/>} />
+          <Route path="/createpost" element={<CreatePost isAuth={isAuth} />} />
           <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
       </Routes>
     </Router>
